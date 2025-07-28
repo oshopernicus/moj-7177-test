@@ -1,0 +1,13 @@
+{% extends "template.njk" %}
+
+{% from "macros/error-banner.njk" import errorBanner %}
+
+{% block content %}
+  <div class="govuk-width-container">
+    <h1 class="govuk-heading-xl">Something went wrong</h1>
+    {{ errorBanner('Error', 'An unexpected error occurred. Please try again later or contact support if the problem persists.') }}
+    <div class="govuk-button-group" style="margin-top: 24px;">
+      <a href="/" class="govuk-button govuk-button--secondary">Back to Home</a>
+    </div>
+  </div>
+{% endblock %}

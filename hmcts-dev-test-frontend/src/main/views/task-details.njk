@@ -1,0 +1,106 @@
+{% extends "template.njk" %}
+
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "macros/notification-banner.njk" import notificationBanner %}
+
+{% block content %}
+  <div class="govuk-width-container">
+    {{ govukBreadcrumbs({
+      items: [
+        { text: "Tasks", href: "/" },
+        { text: "Task Details" }
+      ]
+    }) }}
+    <a href="/" class="govuk-back-link">Back to tasks</a>
+    <h1 class="govuk-heading-l">Task Details</h1>
+    {% if success %}
+      {% if success == 'created' %}
+        {{ notificationBanner('success', 'Task created successfully!') }}
+      {% elif success == 'updated' %}
+        {{ notificationBanner('success', 'Task updated successfully!') }}
+      {% endif %}
+    {% endif %}
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">ID</dt>
+        <dd class="govuk-summary-list__value">{{ task.id }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Title</dt>
+        <dd class="govuk-summary-list__value">{{ task.title }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Description</dt>
+        <dd class="govuk-summary-list__value">{{ task.description }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">{{ task.status }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Due Date/Time</dt>
+        <dd class="govuk-summary-list__value">{{ task.dueDateTime | date }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Created At</dt>
+        <dd class="govuk-summary-list__value">{{ task.createdAt | date }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Updated At</dt>
+        <dd class="govuk-summary-list__value">{{ task.updatedAt | date }}</dd>
+      </div>
+    </dl>
+    <div class="govuk-button-group">
+      <a href="/edit-task/{{ task.id }}" class="govuk-button govuk-button--primary" style="margin-right: 10px;">Update</a>
+      <button class="govuk-button govuk-button--warning" id="delete-task-btn" type="button">Delete</button>
+      <form id="delete-task-form" action="/delete-task/{{ task.id }}" method="post" style="display:none;"></form>
+      <div id="delete-modal" class="govuk-modal">
+        <div class="govuk-modal__content">
+          <h2 class="govuk-heading-l" style="margin-top:0;">Delete Task</h2>
+          <p class="govuk-modal__question">Are you sure you want to delete this task?</p>
+          <div class="govuk-modal__button-group">
+            <button id="modal-delete-confirm" class="govuk-button govuk-button--warning" type="button">Delete</button>
+            <button id="modal-delete-cancel" class="govuk-button govuk-button--secondary" type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <script>
+        const deleteBtn = document.getElementById('delete-task-btn');
+        const deleteModal = document.getElementById('delete-modal');
+        const deleteConfirm = document.getElementById('modal-delete-confirm');
+        const deleteCancel = document.getElementById('modal-delete-cancel');
+        const deleteForm = document.getElementById('delete-task-form');
+        deleteBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          deleteModal.style.display = 'flex';
+        });
+        deleteCancel.addEventListener('click', function() {
+          deleteModal.style.display = 'none';
+        });
+        deleteConfirm.addEventListener('click', function() {
+          deleteForm.submit();
+        });
+      </script>
+    </div>
+    <div id="status-modal" class="govuk-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+      <div style="background:#fff; padding:2rem; border-radius:8px; min-width:300px; max-width:90vw; margin:auto;">
+        <h2 class="govuk-heading-m" style="margin-top:0;">Update Task Status</h2>
+        <div class="govuk-form-group">
+          <label for="modal-status-select" class="govuk-label">Choose new status</label>
+          <select id="modal-status-select" class="govuk-select" style="min-width: 180px;">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Overdue">Overdue</option>
+          </select>
+        </div>
+        <div class="govuk-button-group">
+          <button id="modal-confirm-btn" class="govuk-button" type="button">Update</button>
+          <button id="modal-cancel-btn" class="govuk-button govuk-button--secondary" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+{% endblock %}

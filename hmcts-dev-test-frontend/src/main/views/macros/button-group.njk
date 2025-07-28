@@ -1,0 +1,8 @@
+{# macros/button-group.njk #}
+{% macro buttonGroup(buttons) %}
+  <div class="govuk-button-group" style="display: flex; gap: 8px; margin-top: 16px;">
+    {% for button in buttons %}
+      {{ button }}
+    {% endfor %}
+  </div>
+{% endmacro %}

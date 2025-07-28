@@ -1,0 +1,7 @@
+{# macros/form-field.njk #}
+{% macro formField(label, inputHtml) %}
+  <div class="govuk-form-group">
+    <label class="govuk-label">{{ label }}</label>
+    {{ inputHtml | safe }}
+  </div>
+{% endmacro %}

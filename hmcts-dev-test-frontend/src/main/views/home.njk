@@ -1,0 +1,146 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "macros/filter-buttons.njk" import filterButtons %}
+
+{% extends "template.njk" %}
+
+{% block content %}
+  <div class="govuk-width-container">
+    <!-- Page Header -->
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl" style="text-align:left;">Task Management</h1>
+        <div class="govuk-button-group" style="justify-content: flex-start; display: flex;">
+          <a href="/add-task" class="govuk-button">Add New Task</a>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <!-- Task Table -->
+      <div class="govuk-grid-column-three-quarters">
+        {% if tasks and tasks.length %}
+          <table class="govuk-table">
+            <caption class="govuk-table__caption">Your Tasks</caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header nowrap">ID</th>
+                <th class="govuk-table__header nowrap">Title</th>
+                <th class="govuk-table__header nowrap">Status</th>
+                <th class="govuk-table__header nowrap short-header">Due Date/Time</th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              {% for task in tasks %}
+                <tr class="govuk-table__row">
+                  <td class="govuk-table__cell nowrap">{{ task.id }}</td>
+                  <td class="govuk-table__cell nowrap">
+                    <a href="/task/{{ task.id }}" class="govuk-link">{{ task.title }}</a>
+                  </td>
+                  <td class="govuk-table__cell nowrap">
+                    <span class="status-label status-{{ task.status | lower | replace(' ', '-') }}">
+                      {{ task.status }}
+                    </span>
+                  </td>
+                  <td class="govuk-table__cell nowrap short-header">{{ task.dueDateTime | date }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <table class="govuk-table">
+            <caption class="govuk-table__caption">Your Tasks</caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header nowrap">ID</th>
+                <th class="govuk-table__header nowrap">Title</th>
+                <th class="govuk-table__header nowrap">Status</th>
+                <th class="govuk-table__header nowrap short-header">Due Date</th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell" colspan="4" style="text-align:center;">No task found matching to your search</td>
+              </tr>
+            </tbody>
+          </table>
+        {% endif %}
+      </div>
+      <!-- Filter/Search Form -->
+      <div class="govuk-grid-column-one-quarter">
+        <div style="margin-top: 32px; margin-bottom: 48px;">
+          <form method="get" action="/" class="govuk-form-group filter-form">
+            <div>
+              <label class="govuk-label" for="search">Search by Title</label>
+              <input class="govuk-input" type="text" id="search" name="search" value="{{ search or '' }}" placeholder="Search tasks...">
+            </div>
+            <div style="margin-top: 16px;">
+              <label class="govuk-label" for="status">Filter by Status</label>
+              <select class="govuk-select" id="status" name="status">
+                <option value="">All</option>
+                <option value="Pending" {% if status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="In Progress" {% if status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Completed" {% if status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option value="Overdue" {% if status == 'Overdue' %}selected{% endif %}>Overdue</option>
+              </select>
+            </div>
+            {{ filterButtons() }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .short-header {
+      white-space: nowrap;
+    }
+    .filter-button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .filter-form {
+      margin-bottom: 24px;
+    }
+    .govuk-table__header {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .govuk-table__cell {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .status-label {
+      display: inline-block;
+      min-width: 120px;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 1em;
+      padding: 0 12px;
+      margin: 0 auto;
+    }
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+    .status-in-progress {
+      background: #cce5ff;
+      color: #004085;
+      border: 1px solid #b8daff;
+    }
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status-overdue {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+{% endblock %}

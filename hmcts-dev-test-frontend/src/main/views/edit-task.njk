@@ -1,0 +1,77 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "macros/error-banner.njk" import errorBanner %}
+{% from "macros/notification-banner.njk" import notificationBanner %}
+
+{% extends "template.njk" %}
+
+{% block content %}
+  {{ govukBreadcrumbs({
+    items: [
+      { text: "Tasks", href: "/" },
+      { text: "Edit Task" }
+    ]
+  }) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Edit Task</h1>
+      <form id="edit-task-form" action="/edit-task/{{ task.id }}" method="post" class="edit-task-form">
+        {{ govukInput({
+          name: "title",
+          id: "title",
+          label: { text: "Title" },
+          value: task.title
+        }) }}
+
+        {{ govukTextarea({
+          name: "description",
+          id: "description",
+          label: { text: "Task description" },
+          value: task.description
+        }) }}
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="status">Status</label>
+          <select class="govuk-select" id="status" name="status">
+            <option value="Pending" {% if task.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+            <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+            <option value="Overdue" {% if task.status == 'Overdue' %}selected{% endif %}>Overdue</option>
+          </select>
+        </div>
+
+        {{ govukInput({
+          name: "dueDate",
+          id: "dueDate",
+          label: { text: "Due Date" },
+          type: "date",
+          value: task.dueDate,
+          classes: "govuk-input--width-10"
+        }) }}
+        <input type="hidden" name="dueDateTime" id="dueDateTime" value="{{ task.dueDateTime }}">
+        <script>
+          document.getElementById('edit-task-form').addEventListener('submit', function(e) {
+            var date = document.getElementById('dueDate').value;
+            if (date) {
+              document.getElementById('dueDateTime').value = date + 'T00:00:00';
+            }
+          });
+        </script>
+
+        <div class="govuk-button-group" style="display: flex; gap: 8px; margin-top: 16px;">
+          {{ govukButton({ text: "Update Task" }) }}
+          {{ govukButton({ text: "Back to Task Details", href: "/task/{{ task.id }}", classes: "govuk-button--secondary" }) }}
+        </div>
+      </form>
+      {% if error %}
+        {{ errorBanner('Error', error) }}
+      {% endif %}
+      {% if success %}
+        {{ notificationBanner('success', 'Task updated successfully.') }}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

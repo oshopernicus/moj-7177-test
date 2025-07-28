@@ -1,0 +1,68 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "macros/error-banner.njk" import errorBanner %}
+{% from "macros/notification-banner.njk" import notificationBanner %}
+
+{% extends "template.njk" %}
+
+{% block content %}
+  {{ govukBreadcrumbs({
+    items: [
+      { text: "Tasks", href: "/" },
+      { text: "Add Task" }
+    ]
+  }) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Add New Task</h1>
+      <form action="/add-task" method="post" class="add-task-form">
+        {{ govukInput({
+          name: "title",
+          id: "title",
+          label: { text: "Title" },
+          value: form.title if form else ''
+        }) }}
+
+        {{ govukTextarea({
+          name: "description",
+          id: "description",
+          label: { text: "Task description" },
+          value: form.description if form else ''
+        }) }}
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="status">Status</label>
+          <select class="govuk-select" id="status" name="status">
+            <option value="Pending" {% if form and form.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="In Progress" {% if form and form.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+            <option value="Completed" {% if form and form.status == 'Completed' %}selected{% endif %}>Completed</option>
+            <option value="Overdue" {% if form and form.status == 'Overdue' %}selected{% endif %}>Overdue</option>
+          </select>
+        </div>
+
+        {{ govukInput({
+          name: "dueDateTime",
+          id: "dueDateTime",
+          label: { text: "Due Date/Time" },
+          type: "datetime-local",
+          value: form.dueDateTime if form else ''
+        }) }}
+
+        <div class="govuk-button-group" style="display: flex; gap: 8px; margin-top: 16px;">
+          {{ govukButton({ text: "Add Task" }) }}
+          {{ govukButton({ text: "Back to Task List", href: "/", classes: "govuk-button--secondary" }) }}
+        </div>
+      </form>
+      {% if error %}
+        {{ errorBanner('Error', error) }}
+      {% endif %}
+      {% if success %}
+        {{ notificationBanner('success', 'Task added successfully.') }}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
