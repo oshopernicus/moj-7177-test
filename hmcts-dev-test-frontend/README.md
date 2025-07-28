@@ -1,26 +1,39 @@
 # HMCTS Dev Test Frontend
-This will be the frontend for the brand new HMCTS case management system. As a potential candidate we are leaving
-this in your hands. Please refer to the brief for the complete list of tasks! Complete as much as you can and be
-as creative as you want.
 
-## How to Run the Application
+This is the frontend for the HMCTS case management system. It provides a user interface for interacting with backend services and managing cases and tasks.
 
-### Prerequisites
-- Ensure you have Node.js (v16 or later) and Yarn installed on your system.
+## Prerequisites
+- Node.js (v16 or later)
+- Yarn
 
-### Steps to Run
-1. Install dependencies:
-   ```bash
+## Setup & Running
+
+1. **Install dependencies:**
+   ```sh
    yarn install
    ```
-2. Build the application:
-   ```bash
+2. **Build the application:**
+   ```sh
    yarn webpack
    ```
-3. Start the development server:
-   ```bash
+3. **Start the development server:**
+   ```sh
    yarn start:dev
    ```
-4. Open your browser and navigate to `http://localhost:3000` (or the port specified in your environment).
+4. **Access the app:**
+   Open your browser and go to `http://localhost:3000` (or the port specified in your environment).
 
-You can change the structure however you like!
+## Project Structure
+- `src/main/` - Main application code
+- `src/models/` - Data models
+- `src/services/` - Service layer for API calls
+- `webpack/` - Webpack configuration
+
+## Testing
+Run tests with:
+```sh
+yarn test
+```
+
+---
+You are free to change the structure and add features as needed!
