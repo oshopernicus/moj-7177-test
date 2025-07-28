@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.reform.dev.models.Task;
 import uk.gov.hmcts.reform.dev.services.TaskService;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * REST controller for managing tasks.

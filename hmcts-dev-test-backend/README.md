@@ -1,53 +1,53 @@
 # HMCTS Dev Test Backend
 
-This will be the backend for the brand new HMCTS case management system. As a potential candidate we are leaving this in your hands. Please refer to the brief for the complete list of tasks! Complete as much as you can and be as creative as you want.
+This is the backend service for the HMCTS case management system, providing a RESTful API for managing tasks.
 
 ## Prerequisites
-
 - Java 11 or higher
 - Gradle (or use the included Gradle wrapper)
-- An IDE of your choice (e.g., IntelliJ IDEA)
 
-## Building the Project
+## Setup & Running
 
-Run the following command to build the project:
+1. **Build the project:**
+   ```sh
+   ./gradlew build
+   ```
 
-```bash
-./gradlew build
-```
+2. **Run the service:**
+   ```sh
+   ./gradlew bootRun
+   ```
+   The service will start on `http://localhost:8080` by default.
 
-This will compile the code, run the tests, and package the application.
+## API Endpoints
 
-## Running the Service
+All endpoints are prefixed with `/api/tasks`.
 
-You can run the service using your IDE or the command line. To run it from the command line, use:
+### 1. Create a Task
+- **POST** `/api/tasks`
+- **Request Body:** JSON Task object
+- **Response:** 200 OK with created Task, or 400 Bad Request
 
-```bash
-./gradlew bootRun
-```
+### 2. Get Task by ID
+- **GET** `/api/tasks/{id}`
+- **Response:** 200 OK with Task, or 404 Not Found
 
-The service will start on `http://localhost:8080` by default.
+### 3. Get All Tasks
+- **GET** `/api/tasks`
+- **Response:** 200 OK with list of Tasks
 
-## Example Endpoint
+### 4. Update Task by ID
+- **PUT** `/api/tasks/{id}`
+- **Request Body:** JSON Task object
+- **Response:** 200 OK with updated Task, or 404 Not Found
 
-There is an example endpoint provided to retrieve an example of a case. You are free to add/remove fields as you wish. The endpoint can be accessed at:
-
-```
-GET /api/cases/example
-```
+### 5. Delete Task by ID
+- **DELETE** `/api/tasks/{id}`
+- **Response:** 200 OK if deleted, or 404 Not Found
 
 ## Testing
 
-To run the tests, execute:
-
-```bash
+Run all tests with:
+```sh
 ./gradlew test
 ```
-
-Ensure all tests pass before making any changes or submitting your work.
-
-## Notes for Developers
-
-- Follow best practices for REST API design.
-- Add meaningful tests for any new functionality.
-- Document any additional endpoints or features you implement.
