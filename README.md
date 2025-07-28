@@ -1,4 +1,4 @@
-# HMCTS Dev Test Project
+# HMCTS dts-developer-challenge
 
 This repository contains both the backend and frontend for the HMCTS case management system.
 
